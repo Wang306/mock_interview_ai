@@ -6,7 +6,7 @@ import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import {vapi} from '@/lib/vapi.sdk';
 import {interviewer} from "@/constants";
-import {createFeedback} from "@/lib/actions/general.action";
+import {createFeedback, updateId} from "@/lib/actions/general.action";
 
 enum CallStatus {
     INACTIVE = 'INACTIVE',
@@ -70,7 +70,8 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
         // }
 
         if (success && id) {
-            router.push(`/interview/${interviewId}/feedback`);
+            //router.push(`/interview/${interviewId}/feedback`);
+            router.push('/');
         } else {
             console.log('Error saving feedback.');
             router.push('/');
@@ -117,6 +118,7 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
         }
     };
     const handleDisconnect = async () => {
+        if (interviewId) await updateId(userId!, interviewId);
         setCallStatus(CallStatus.FINISHED);
         vapi.stop();
     }
